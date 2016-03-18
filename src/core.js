@@ -41,6 +41,13 @@ function html2canvas(nodeList, options) {
 
     var node = ((nodeList === undefined) ? [document.documentElement] : ((nodeList.length) ? nodeList : [nodeList]))[0];
     node.setAttribute(html2canvasNodeAttribute + index, index);
+
+    // setting thwe absolute path for the links and script files references
+    var l = node.ownerDocument.head.getElementsByTagName('link');
+    [].forEach.call(l, function(link){ link.href = link.href} );
+    var s = node.ownerDocument.head.getElementsByTagName('script');
+    [].forEach.call( s, function(script){ script.src = script.src } );
+
     return renderDocument(node.ownerDocument, options, node.ownerDocument.defaultView.innerWidth, node.ownerDocument.defaultView.innerHeight, index).then(function(canvas) {
         if (typeof(options.onrendered) === "function") {
             log("options.onrendered is deprecated, html2canvas returns a Promise containing the canvas");
